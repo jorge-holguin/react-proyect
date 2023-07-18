@@ -20,7 +20,12 @@ import { useLocalStorage } from './useLocalStorage';
 
 function App() {
   
-  const [todos, saveTodos] = useLocalStorage('TODOS_V1', [] );
+  const {
+    item: todos, 
+    saveItem: saveTodos,
+    loading,
+    error,
+  } = useLocalStorage('TODOS_V1', [] );
   const [searchValue, setSearchValue] = React.useState('');
 
   const completedTodos = todos.filter( todo => !!todo.completed).length;
@@ -64,6 +69,9 @@ function App() {
       />
         
       <TodoList>
+        {loading && <p>Estamos cargando...</p>}
+        {error && <p>Desespérate, hubo un error!!</p>}
+        {(!loading && searchedTodos.length === 0) && <p>Crea tu primer TODO! </p>}
         {searchedTodos.map(todo => (
           <TodoItem 
             key={todo.text} 
